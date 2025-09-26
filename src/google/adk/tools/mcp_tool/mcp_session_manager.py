@@ -378,7 +378,8 @@ class MCPSessionManager:
       for session_key in list(self._sessions.keys()):
         _, exit_stack = self._sessions[session_key]
         try:
-          await exit_stack.aclose()
+          #await exit_stack.aclose()
+          await asyncio.wait_for(asyncio.shield(exit_stack.aclose()), timeout=30.0)
         except Exception as e:
           # Log the error but don't re-raise to avoid blocking shutdown
           print(
